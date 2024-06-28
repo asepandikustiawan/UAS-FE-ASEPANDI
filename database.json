@@ -1,0 +1,51 @@
+{
+    "products": [
+      {
+        "id": 1,
+        "name": "Honda Beat",
+        "description": "Motor yang dibekali dengan tenaga kapasitas mesin 250 cc",
+        "category": "Matic",
+        "price": 70000000,
+        "image": "img/Honda Beat.webp"
+      },
+      {
+        "id": 2,
+        "name": "Yamaha MT-15",
+        "description": "Motor yang dibekali dengan tenaga kapasitas mesin 250 cc",
+        "category": "Matic",
+        "price": 36000000,
+        "image": "img/Vario.webp"
+      },
+      {
+        "id": 3,
+        "name": "PCX",
+        "description": "Motor yang dibekali dengan tenaga kapasitas mesin 250 cc",
+        "category": "Matic",
+        "price": 80000000,
+        "image": "img/Pcx.webp"
+      },
+      {
+        "id": 4,
+        "name": "Suzuki GSX-R150",
+        "description": "Motor yang dibekali dengan tenaga kapasitas mesin 250 cc",
+        "category": "Sport",
+        "price": 45000000,
+        "image": "img/Pcx.webp"
+      }
+    ],
+    "categories": [
+      {
+        "id": 1,
+        "name": "Matic"
+      },
+      {
+        "id": 2,
+        "name": "Sport"
+      },
+      {
+        "id": 3,
+        "name": "Bebek"
+      }
+    ]
+  }
+  

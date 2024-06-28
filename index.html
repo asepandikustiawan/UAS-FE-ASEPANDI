@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Showcase Produk</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body class="bg-gray-100">
+    <header class="bg-gray-200 text-gray-900 py-4">
+        <div class="text-center mb-4">
+            <img src="img/logo-lp3i (1).png" alt="Logo LP3I" class="w-40 mx-auto">
+        </div>
+    </header><br>
+    <h1 class="text-2xl font-bold text-center">Dealer Motor Resmi</h1>
+    <p class="text-sm text-center">Berikut ini adalah beberapa motor yang tersedia:</p>
+
+    <div class="container mx-auto py-8">
+        <div id="productList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mt-8">
+            <!-- Produk akan ditambahkan disini menggunakan JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            const products = JSON.parse(localStorage.getItem('products')) || [];
+
+            const renderProducts = () => {
+                $('#productList').empty();
+                products.forEach(product => {
+                    $('#productList').append(`
+                        <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+                            <img src="${product.image}" alt="${product.name}" class="w-full">
+                            <div class="p-4">
+                                <h2 class="text-xl font-semibold mb-2">${product.name}</h2>
+                                <p class="text-sm mb-2">${product.description}</p>
+                                <div class="flex justify-start mt-2">
+                                    <span class="bg-green-200 text-green-800 text-xs font-semibold px-2 rounded-full">${product.category}</span>
+                                </div>
+                                <p class="text-lg font-bold">Rp ${product.price.toLocaleString()}</p>
+                            </div>
+                        </div>
+                    `);
+                });
+            };
+
+            renderProducts();
+        });
+    </script>
+</body>
+
+</html>

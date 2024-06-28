@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body class="bg-gray-100">
+    <header class="bg-gray-200 text-grey-900 py-4">
+        <div class="text-center mb-4">
+            <h1 class="text-2xl font-bold">Admin Motors</h1>
+        </div>
+    </header>
+
+    <div class="container mx-auto py-8">
+        <div class="mb-4">
+            <button id="addProductBtn" class="bg-blue-500 text-white py-2 px-4 rounded">Tambah Produk</button>
+        </div>
+
+        <div id="productForm" class="hidden bg-white p-4 rounded shadow-md">
+            <h2 class="text-xl font-semibold mb-2" id="formTitle">Tambah Produk</h2>
+            <form id="productFormContent">
+                <input type="hidden" id="productId">
+                <div class="mb-4">
+                    <label for="productName" class="block text-sm font-medium text-gray-700">Nama Produk</label>
+                    <input type="text" id="productName" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                </div>
+                <div class="mb-4">
+                    <label for="productDescription" class="block text-sm font-medium text-gray-700">Deskripsi Produk</label>
+                    <input type="text" id="productDescription" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                </div>
+                <div class="mb-4">
+                    <label for="productCategory" class="block text-sm font-medium text-gray-700">Kategori Produk</label>
+                    <select id="productCategory" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        <option value="Matic">Matic</option>
+                        <option value="Sport">Sport</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="productPrice" class="block text-sm font-medium text-gray-700">Harga Produk</label>
+                    <input type="number" id="productPrice" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                </div>
+                <div class="mb-4">
+                    <label for="productImage" class="block text-sm font-medium text-gray-700">Gambar Produk</label>
+                    <input type="text" id="productImage" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                </div>
+                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Simpan</button>
+            </form>
+        </div>
+
+        <div id="productList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mt-8">
+            <!-- Produk akan ditambahkan disini menggunakan JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            let products = JSON.parse(localStorage.getItem('products')) || [
+                {
+                    id: 1,
+                    name: "Honda Beat",
+                    description: "Motor yang dibekali dengan tenaga kapasitas mesin 250 cc",
+                    category: "Matic",
+                    price: 70000000,
+                    image: "img/Honda Beat.webp"
+                },
+                {
+                    id: 2,
+                    name: "Yamaha MT-15",
+                    description: "Motor yang dibekali dengan tenaga kapasitas mesin 250 cc",
+                    category: "Matic",
+                    price: 36000000,
+                    image: "img/Vario.webp"
+                },
+                {
+                    id: 3,
+                    name: "PCX",
+                    description: "Motor yang dibekali dengan tenaga kapasitas mesin 250 cc",
+                    category: "Matic",
+                    price: 80000000,
+                    image: "img/Pcx.webp"
+                },
+                {
+                    id: 4,
+                    name: "Suzuki GSX-R150",
+                    description: "Motor yang dibekali dengan tenaga kapasitas mesin 250 cc",
+                    category: "Sport",
+                    price: 45000000,
+                    image: "img/Cbr.webp"
+                }
+            ];
+
+            const renderProducts = () => {
+                $('#productList').empty();
+                products.forEach(product => {
+                    $('#productList').append(`
+                        <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+                            <img src="${product.image}" alt="${product.name}" class="w-full">
+                            <div class="p-4">
+                                <h2 class="text-xl font-semibold mb-2">${product.name}</h2>
+                                <p class="text-sm mb-2">${product.description}</p>
+                                <div class="flex justify-start mt-2">
+                                    <span class="bg-green-200 text-green-800 text-xs font-semibold px-2 rounded-full">${product.category}</span>
+                                </div>
+                                <p class="text-lg font-bold">Rp ${product.price.toLocaleString()}</p>
+                                <button class="bg-yellow-500 text-white py-1 px-2 rounded mt-2" onclick="editProduct(${product.id})">Edit</button>
+                                <button class="bg-red-500 text-white py-1 px-2 rounded mt-2" onclick="deleteProduct(${product.id})">Hapus</button>
+                            </div>
+                        </div>
+                    `);
+                });
+            };
+
+            renderProducts();
+
+            $('#addProductBtn').click(() => {
+                $('#formTitle').text('Tambah Produk');
+                $('#productFormContent')[0].reset();
+                $('#productId').val('');
+                $('#productForm').toggleClass('hidden');
+            });
+
+            $('#productFormContent').submit(function (e) {
+                e.preventDefault();
+                const id = $('#productId').val();
+                const productData = {
+                    name: $('#productName').val(),
+                    description: $('#productDescription').val(),
+                    category: $('#productCategory').val(),
+                    price: parseInt($('#productPrice').val()),
+                    image: $('#productImage').val()
+                };
+
+                if (id) {
+                    const index = products.findIndex(p => p.id == id);
+                    products[index] = { id: parseInt(id), ...productData };
+                } else {
+                    const newProduct = {
+                        id: products.length ? products[products.length - 1].id + 1 : 1,
+                        ...productData
+                    };
+                    products.push(newProduct);
+                }
+
+                localStorage.setItem('products', JSON.stringify(products));
+                renderProducts();
+                $('#productForm').addClass('hidden');
+                $('#productFormContent')[0].reset();
+            });
+
+            window.editProduct = (id) => {
+                const product = products.find(p => p.id == id);
+                if (product) {
+                    $('#formTitle').text('Edit Produk');
+                    $('#productId').val(product.id);
+                    $('#productName').val(product.name);
+                    $('#productDescription').val(product.description);
+                    $('#productCategory').val(product.category);
+                    $('#productPrice').val(product.price);
+                    $('#productImage').val(product.image);
+                    $('#productForm').removeClass('hidden');
+                }
+            };
+
+            window.deleteProduct = (id) => {
+                products = products.filter(product => product.id !== id);
+                localStorage.setItem('products', JSON.stringify(products));
+                renderProducts();
+            };
+        });
+    </script>
+</body>
+
+</html>
